@@ -22,7 +22,7 @@ on:
 jobs:
   generate_reports:
     runs-on: ubuntu-latest
-    environment: ${{ github.repository_owner == 'BalancerMaxis' && 'default' || 'external_pr' }}
+    environment: ${{ github.event.pull_request.head.repo.full_name != github.repository && 'external_pr' || 'default' }}
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       WEB3_INFURA_PROJECT_ID: ${{ secrets.WEB3_INFURA_PROJECT_ID }}
