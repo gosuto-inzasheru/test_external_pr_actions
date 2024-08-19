@@ -9,10 +9,21 @@ on:
       checkout_ref:
         required: true
         type: string
+  pull_request_target:
+    branches:
+      - main
+    paths:
+      - "BIPs/**"
+    types:
+      - opened
+      - reopened
+      - synchronize
 
 jobs:
   generate_reports:
     runs-on: ubuntu-latest
+    # secrets: inherit
+    environment: external_pr
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       WEB3_INFURA_PROJECT_ID: ${{ secrets.WEB3_INFURA_PROJECT_ID }}
@@ -27,13 +38,13 @@ jobs:
       TENDERLY_ACCESS_KEY: ${{ secrets.TENDERLY_ACCESS_KEY }}
       TENDERLY_ACCOUNT_NAME: ${{ secrets.TENDERLY_ACCOUNT_NAME }}
       TENDERLY_PROJECT_NAME: ${{ secrets.TENDERLY_PROJECT_NAME }}
-      PR_NUMBER: ${{ inputs.pr_number }}
-      COMMIT_SHA: ${{ inputs.checkout_ref }}
+      PR_NUMBER: ${{ inputs.pr_number == '' && github.event.number || inputs.pr_number }}
+      COMMIT_SHA: ${{ inputs.checkout_ref  == '' && github.event.pull_request.head.ref || inputs.checkout_ref }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.checkout_ref }}
+          ref: ${{ env.COMMIT_SHA }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           fetch-depth: 0
 
@@ -98,7 +109,7 @@ jobs:
         with:
           filePath: action-scripts/brownie/validate_bip_results.txt
           reactions: eyes
-          pr_number: ${{ inputs.pr_number }}
+          pr_number: ${{ env.PR_NUMBER }}
 
       - name: Post Payload Report as Comment
         continue-on-error: true
@@ -107,7 +118,7 @@ jobs:
         with:
           filePath: action-scripts/brownie/payload_reports.txt
           reactions: eyes
-          pr_number: ${{ inputs.pr_number }}
+          pr_number: ${{ env.PR_NUMBER }}
 
       - name: Prettify code
         uses: creyD/prettier_action@v4.3
