@@ -1,16 +1,21 @@
 name: Process BIP PR
 
 on:
-  pull_request:
-    types: [opened, reopened, synchronize]
+  pull_request_target:
+    branches:
+      - main
     paths:
       - "BIPs/**"
-      - "config/**"
-      - "MaxiOps/**"
+    types:
+      - labeled
 jobs:
   run_reports:
-    uses: "BalancerMaxis/test_external_pr_actions/.github/workflows/run_reports_reusable.yaml@main"
-    secrets: inherit
-    with:
-      pr_number: ${{ github.event.number }}
-      checkout_ref: ${{ github.event.pull_request.head.ref }}
+    if: ${{ github.event.label.name == 'external' }}
+    runs-on: ubuntu-latest
+    environment: external_pr
+    steps:
+      - uses: "BalancerMaxis/test_external_pr_actions/.github/workflows/run_reports_reusable.yaml@main"
+        # secrets: inherit
+        with:
+          pr_number: ${{ github.event.number }}
+          checkout_ref: ${{ github.event.pull_request.head.ref }}
