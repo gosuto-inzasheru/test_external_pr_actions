@@ -79,7 +79,7 @@ jobs:
   run_reports:
     needs: add-rewards
     secrets: inherit
-    uses: "BalancerMaxis/multisig-ops/.github/workflows/run_reports_reusable.yaml@main"
+    uses: "BalancerMaxis/test_external_pr_actions/.github/workflows/run_reports_reusable.yaml@main"
     with:
       pr_number: ${{ needs.add-rewards.outputs.pull-request-number }}
       checkout_ref: ${{ needs.add-rewards.outputs.pull-request-branch }}

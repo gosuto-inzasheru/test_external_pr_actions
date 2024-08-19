@@ -81,7 +81,7 @@ jobs:
   run_reports:
     needs: erc20-transfer
     secrets: inherit
-    uses: "BalancerMaxis/multisig-ops/.github/workflows/run_reports_reusable.yaml@main"
+    uses: "BalancerMaxis/test_external_pr_actions/.github/workflows/run_reports_reusable.yaml@main"
     with:
       pr_number: ${{ needs.erc20-transfer.outputs.pull-request-number }}
       checkout_ref: ${{ needs.erc20-transfer.outputs.pull-request-branch }}

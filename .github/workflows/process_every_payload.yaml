@@ -9,7 +9,7 @@ on:
       - "MaxiOps/**"
 jobs:
   run_reports:
-    uses: "BalancerMaxis/multisig-ops/.github/workflows/run_reports_reusable.yaml@main"
+    uses: "BalancerMaxis/test_external_pr_actions/.github/workflows/run_reports_reusable.yaml@main"
     secrets: inherit
     with:
       pr_number: ${{ github.event.number }}
