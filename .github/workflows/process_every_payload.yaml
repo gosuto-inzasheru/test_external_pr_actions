@@ -7,10 +7,12 @@ on:
     paths:
       - "BIPs/**"
     types:
-      - labeled
+      - opened
+      - reopened
+      - synchronize
 jobs:
   run_reports:
-    if: ${{ github.event.label.name == 'external' }}
+    # if: ${{ github.event.label.name == 'external' }}
     runs-on: ubuntu-latest
     environment: external_pr
     steps:
