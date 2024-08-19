@@ -62,6 +62,7 @@ jobs:
 
       - name: Setup Environment
         run: |
+          echo "gh repo owner is ${{ github.repository_owner }}"
           cd action-scripts/brownie
           : # https://github.com/yaml/pyyaml/issues/724#issuecomment-1848423837
           pip install "cython<3.0.0" wheel
